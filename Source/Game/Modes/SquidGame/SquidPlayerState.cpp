@@ -14,12 +14,24 @@ void ASquidPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ASquidPlayerState, Place);
+	DOREPLIFETIME(ASquidPlayerState, DiedAt);
 }
 
 void ASquidPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	BindPawnDied();
+	OnPawnSet.AddDynamic(this, &ASquidPlayerState::PawnSet);
+}
+
+void ASquidPlayerState::PawnSet(APlayerState* Player, APawn* NewPawn, APawn* OldPawn)
+{
+	BindPawnDied();
+}
+
+void ASquidPlayerState::BindPawnDied()
+{
 	if (HasAuthority() && GetPawn())
 	{
 		if (auto HealthComponent = GetPawn()->FindComponentByClass<UHealthComponent>())
@@ -45,6 +57,7 @@ bool ASquidPlayerState::IsDead() const
 void ASquidPlayerState::PawnDied()
 {
 	DiedAt = Net::TimeNow();
+	ForceNetUpdate();
 }
 
 void ASquidPlayerState::RememberTransform()

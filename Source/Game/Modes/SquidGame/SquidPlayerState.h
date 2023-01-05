@@ -43,12 +43,14 @@ public:
 protected:
 	UFUNCTION()
 	void OnRep_Place();
-	/*UFUNCTION()
-	void PawnSet(APlayerState* Player, APawn* NewPawn, APawn* OldPawn);*/
+	UFUNCTION()
+	void PawnSet(APlayerState* Player, APawn* NewPawn, APawn* OldPawn);
 	UFUNCTION()
 	void PawnDied();
 
 private:
+	void BindPawnDied();
+
 	UPROPERTY(ReplicatedUsing=OnRep_Place)
 	int32 Place { INDEX_NONE };
 	UPROPERTY(Replicated)
