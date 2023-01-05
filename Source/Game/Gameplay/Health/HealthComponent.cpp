@@ -35,6 +35,6 @@ void UHealthComponent::OnRep_bDead()
 {
 	if (bDead)
 	{
-		Died.Broadcast();
+		Died.Broadcast(GetOwner());
 	}
 }

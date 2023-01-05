@@ -7,7 +7,7 @@
 
 ASquidGameState::ASquidGameState()
 {
-	NetUpdateFrequency = .1f;
+	NetUpdateFrequency = 1.f;
 }
 
 void ASquidGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

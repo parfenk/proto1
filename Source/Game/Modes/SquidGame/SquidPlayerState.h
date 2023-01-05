@@ -46,7 +46,7 @@ protected:
 	UFUNCTION()
 	void PawnSet(APlayerState* Player, APawn* NewPawn, APawn* OldPawn);
 	UFUNCTION()
-	void PawnDied();
+	void PawnDied(AActor* Owner);
 
 private:
 	void BindPawnDied();

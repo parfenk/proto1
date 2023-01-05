@@ -15,7 +15,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End UObject Interface
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDied);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDied, AActor*, DiedActor);
 	UPROPERTY(BlueprintAssignable)
 	FDied Died;
 

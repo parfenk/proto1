@@ -54,7 +54,7 @@ bool ASquidPlayerState::IsDead() const
 	return true;
 }
 
-void ASquidPlayerState::PawnDied()
+void ASquidPlayerState::PawnDied(AActor* DiedOwner)
 {
 	DiedAt = Net::TimeNow();
 	ForceNetUpdate();
