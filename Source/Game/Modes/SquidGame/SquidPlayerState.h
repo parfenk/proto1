@@ -17,8 +17,29 @@ public:
 
 	UFUNCTION(Category=PlayerState, BlueprintCallable)
 	int32 GetPlace() const { return Place; }
+	UFUNCTION(Category=PlayerState, BlueprintCallable, BlueprintAuthorityOnly)
+	void SetPlace(int32 NewPlace);
+	UFUNCTION(Category=PlayerState, BlueprintCallable)
+	bool IsFinishLineCrossed() const { return Place != INDEX_NONE; }
+	UFUNCTION(Category=PlayerState, BlueprintCallable)
+	bool IsDead() const;
+
+	UFUNCTION(Category=PlayerState, BlueprintCallable, BlueprintAuthorityOnly)
+	void RememberTransform();
+	UFUNCTION(Category=PlayerState, BlueprintCallable, BlueprintAuthorityOnly)
+	const FTransform& GetLastAllowedToMoveTransform() const { return LastAllowedToMoveTransform; }
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FFinishLineCrossed, int32, Place);
+	UPROPERTY(BlueprintAssignable)
+	FFinishLineCrossed FinishLineCrossed;
+
+protected:
+	UFUNCTION()
+	void OnRep_Place();
 
 private:
-	UPROPERTY(Replicated)
-	int32 Place { 0 };
+	UPROPERTY(ReplicatedUsing=OnRep_Place)
+	int32 Place { INDEX_NONE };
+
+	FTransform LastAllowedToMoveTransform;
 };

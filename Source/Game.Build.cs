@@ -12,7 +12,8 @@ public class Game : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
-            "NetCore"
+            "NetCore",
+            "Utils",
         });
 	}
 }

@@ -1,0 +1,10 @@
+{
+	"FileVersion": 3,
+	"Modules": [
+		{
+			"Name": "Utils",
+			"Type": "Runtime",
+			"LoadingPhase": "PreLoadingScreen"
+		}
+	]
+}
