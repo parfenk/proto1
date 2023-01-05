@@ -4,7 +4,7 @@
 ADoll::ADoll()
 {
 	NetUpdateFrequency = 1.f;
-	// bReplicates = true;
+	bReplicates = true;
 }
 
 void ADoll::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -15,6 +15,11 @@ void ADoll::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimePro
 	DOREPLIFETIME(ADoll, bWatching);
 }
 
+void ADoll::OnRep_bWatching()
+{
+	WatchingStateChanged.Broadcast(bWatching);
+}
+
 void ADoll::SetRotationSpeed(float NewRotationSpeed)
 {
 	RotationSpeed = NewRotationSpeed;
@@ -22,5 +27,11 @@ void ADoll::SetRotationSpeed(float NewRotationSpeed)
 
 void ADoll::SetIsWatching(bool bNewWatching)
 {
+	if (bWatching == bNewWatching)
+	{
+		return;
+	}
+
 	bWatching = bNewWatching;
+	OnRep_bWatching();
 }

@@ -15,6 +15,10 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End UObject Interface
 
+	//~ Begin AGameState Interface.
+	virtual void OnRep_MatchState() override;
+	//~ End AGameState Interface
+
 	template<typename Type>
 	TArray<Type*> GetPlayerArray() const
 	{
@@ -41,9 +45,16 @@ public:
 	UFUNCTION(Category=GameState, BlueprintCallable, BlueprintAuthorityOnly)
 	void SetGameDuration(float DelayBeforeStart, float Duration);
 
+	UFUNCTION(Category=GameState, BlueprintCallable)
+	int32 GetNumPlayersCrossedFinishLine() const;
+
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMovementPermitChanged, bool, bAllowMovement);
 	UPROPERTY(BlueprintAssignable)
 	FMovementPermitChanged MovementPermitChanged;
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameEnded);
+	UPROPERTY(BlueprintAssignable)
+	FGameEnded GameEnded;
 
 protected:
 	UFUNCTION()

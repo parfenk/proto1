@@ -1,4 +1,6 @@
 #include "SquidPlayerState.h"
+#include "SquidGameState.h"
+#include "NetFunctionLibrary.h"
 #include "Gameplay/Health/HealthComponent.h"
 #include "Net/UnrealNetwork.h"
 
@@ -14,6 +16,19 @@ void ASquidPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME(ASquidPlayerState, Place);
 }
 
+void ASquidPlayerState::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	if (HasAuthority() && GetPawn())
+	{
+		if (auto HealthComponent = GetPawn()->FindComponentByClass<UHealthComponent>())
+		{
+			HealthComponent->Died.AddDynamic(this, &ASquidPlayerState::PawnDied);
+		}
+	}
+}
+
 bool ASquidPlayerState::IsDead() const
 {
 	if (auto Pawn = GetPawn())
@@ -25,6 +40,11 @@ bool ASquidPlayerState::IsDead() const
 	}
 
 	return true;
+}
+
+void ASquidPlayerState::PawnDied()
+{
+	DiedAt = Net::TimeNow();
 }
 
 void ASquidPlayerState::RememberTransform()
@@ -52,4 +72,14 @@ void ASquidPlayerState::OnRep_Place()
 	{
 		FinishLineCrossed.Broadcast(Place);
 	}
+}
+
+float ASquidPlayerState::GetLifetime() const
+{
+	if (auto GameState = GetWorld()->GetGameState<ASquidGameState>())
+	{
+		return FMath::Max(DiedAt - GameState->GetGameStartedAt(), 0.f);
+	}
+
+	return 0.f;
 }

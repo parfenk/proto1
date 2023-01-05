@@ -37,5 +37,6 @@ bool ASquidGameMode::ReadyToEndMatch_Implementation()
 
 void ASquidGameMode::HandleMatchHasStarted()
 {
+	Super::HandleMatchHasStarted();
 	MatchHasStarted();
 }

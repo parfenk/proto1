@@ -15,12 +15,19 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~ End UObject Interface
 
+	//~ Begin AActor Interface.
+	virtual void BeginPlay() override;
+	//~ End AActor Interface
+
 	UFUNCTION(Category=PlayerState, BlueprintCallable)
 	int32 GetPlace() const { return Place; }
 	UFUNCTION(Category=PlayerState, BlueprintCallable, BlueprintAuthorityOnly)
 	void SetPlace(int32 NewPlace);
 	UFUNCTION(Category=PlayerState, BlueprintCallable)
 	bool IsFinishLineCrossed() const { return Place != INDEX_NONE; }
+
+	UFUNCTION(Category=PlayerState, BlueprintCallable)
+	float GetLifetime() const;
 	UFUNCTION(Category=PlayerState, BlueprintCallable)
 	bool IsDead() const;
 
@@ -36,10 +43,16 @@ public:
 protected:
 	UFUNCTION()
 	void OnRep_Place();
+	/*UFUNCTION()
+	void PawnSet(APlayerState* Player, APawn* NewPawn, APawn* OldPawn);*/
+	UFUNCTION()
+	void PawnDied();
 
 private:
 	UPROPERTY(ReplicatedUsing=OnRep_Place)
 	int32 Place { INDEX_NONE };
+	UPROPERTY(Replicated)
+	float DiedAt;
 
 	FTransform LastAllowedToMoveTransform;
 };
